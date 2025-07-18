@@ -1,13 +1,15 @@
+export PYTHONDONTWRITEBYTECODE=1
+
 criar_ambiente:
 	python3 -m venv .venv
 
 salvar_bibliotecas:
-	@pip freeze > requirements.txt
+	@. .venv/bin/activate && pip freeze > requirements.txt
 
 instalar_bibliotecas:
-	@pip install -r requirements.txt
-	@python3 -m pip install --upgrade pip
+	@. .venv/bin/activate && pip install -r requirements.txt
+	@. .venv/bin/activate && python3 -m pip install --upgrade pip
 
 run:
 	@echo "Iniciando Jogo da Velha"
-	@PYTHONDONTWRITEBYTECODE=1 python3 jogo_da_velha.py
+	@. .venv/bin/activate && python3 Jogo/interface.py

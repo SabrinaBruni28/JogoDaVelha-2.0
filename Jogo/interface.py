@@ -1,18 +1,13 @@
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
+import sys
 from view_utils import  WidgetHelper, CaixaConfirmacao, ViewHelper
-from forms import Formulario, FormularioOpcoes
 from jogo_da_velha import JogoDaVelha
+from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import (
-   QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QDialog, QGraphicsOpacityEffect,
-   QVBoxLayout, QHBoxLayout, QScrollArea, QFrame, QStackedWidget, QSizePolicy,
-   QMessageBox, QPushButton
-
+   QApplication, QMainWindow, QWidget, QLabel, QDialog,
+   QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QSizePolicy, QPushButton
 )
-from PyQt6.QtGui import QFont
 
 class MensagemVencedor(QWidget):
     def __init__(self, parent=None, mensagem="", on_reiniciar=None):
