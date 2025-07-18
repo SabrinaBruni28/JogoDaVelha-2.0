@@ -105,8 +105,8 @@ class JogoDaVelhaInterface(QMainWindow):
         return bloco
     
     def adicionarJogada(self, num: int, layout: QVBoxLayout):
-        bolinha_label = WidgetHelper.imagem("Images/bolinha.png", scaled=150)
-        x_label = WidgetHelper.imagem("Images/x.jpg", scaled=150)
+        bolinha_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/bolinha.png"), scaled=150)
+        x_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/x.jpg"), scaled=150)
         x = num // 3
         y = num % 3
 

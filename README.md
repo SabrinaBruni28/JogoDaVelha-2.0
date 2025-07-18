@@ -30,6 +30,16 @@ Este é um jogo da velha com interface gráfica moderna construída em **Python*
 
 ---
 
+## ⬇️ Download do Executável
+
+Baixe a versão compilada do jogo para Linux:
+
+🔗 **[Download JogoDaVelha](https://github.com/SabrinaBruni28/JogoDaVelha/dist/JogoDaVelha)**
+
+> Obs: Clique no link acima para acessar a última versão disponível. Nenhuma instalação é necessária — apenas execute click duas vezes no arquivo baixado.
+
+---
+
 ## 🛠️ Como rodar o projeto
 
 Siga os passos abaixo para configurar e executar o jogo:

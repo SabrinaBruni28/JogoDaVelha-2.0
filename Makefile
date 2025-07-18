@@ -13,3 +13,21 @@ instalar_bibliotecas:
 run:
 	@echo "Iniciando Jogo da Velha"
 	@. .venv/bin/activate && python3 Jogo/interface.py
+
+executavel_windows:
+	pyinstaller --name JogoDaVelha ^
+	            --onefile ^
+	            --windowed ^
+	            --icon=Images/jogo-da-velha.ico ^
+	            --add-data "Images;Images" ^
+	            Jogo/interface.py
+
+executavel_linux:
+	pyinstaller --name JogoDaVelha \
+	            --onefile \
+	            --windowed \
+	            --icon=Images/jogo-da-velha.ico \
+	            --add-data "Images:Images" \
+	            Jogo/interface.py
+
+

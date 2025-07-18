@@ -1,5 +1,4 @@
 import sys, os, shutil
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from PyQt6.QtGui import QPixmap, QMovie, QPainter
 from PyQt6.QtCore import Qt, QTimer, QSize
@@ -11,6 +10,11 @@ from PyQt6.QtWidgets import (
 )
 
 class WidgetHelper(QWidget):
+    @staticmethod
+    def caminho_absoluto(rel_path):
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(__file__))
+        return os.path.join(base_path, rel_path)
+
     @staticmethod
     def lista_grid():
         scroll = QScrollArea()
