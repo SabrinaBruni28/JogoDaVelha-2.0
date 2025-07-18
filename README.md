@@ -61,7 +61,7 @@ make run
 ```bash
 make executavel_linux
 ```
-#### ▶️ Gerar um executável Windowns
+#### ▶️ Gerar um executável Windows
 
 ```bash
 make executavel_windows
