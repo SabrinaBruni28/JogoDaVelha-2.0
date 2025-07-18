@@ -27,17 +27,6 @@ Este é um jogo da velha com interface gráfica moderna construída em **Python*
 ├── requirements.txt         # Dependências do projeto
 └── Makefile                 # Automação de comandos
 ```
-
----
-
-## ⬇️ Download do Executável
-
-Baixe a versão compilada do jogo para Linux:
-
-🔗 **[Download JogoDaVelha](https://github.com/SabrinaBruni28/JogoDaVelha/dist/JogoDaVelha)**
-
-> Obs: Clique no link acima para acessar a última versão disponível. Nenhuma instalação é necessária — apenas execute click duas vezes no arquivo baixado.
-
 ---
 
 ## 🛠️ Como rodar o projeto
@@ -67,6 +56,16 @@ make instalar_bibliotecas
 make run
 ```
 
+#### ▶️ Gerar um executável Linux
+
+```bash
+make executavel_linux
+```
+#### ▶️ Gerar um executável Windowns
+
+```bash
+make executavel_windows
+```
 ---
 
 ## 🧑‍💻 Autor

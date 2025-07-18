@@ -15,7 +15,7 @@ run:
 	@. .venv/bin/activate && python3 Jogo/interface.py
 
 executavel_windows:
-	pyinstaller --name JogoDaVelha ^
+	@. .venv/bin/activate && pyinstaller --name JogoDaVelha ^
 	            --onefile ^
 	            --windowed ^
 	            --icon=Images/jogo-da-velha.ico ^
@@ -23,7 +23,7 @@ executavel_windows:
 	            Jogo/interface.py
 
 executavel_linux:
-	pyinstaller --name JogoDaVelha \
+	@. .venv/bin/activate && pyinstaller --name JogoDaVelha \
 	            --onefile \
 	            --windowed \
 	            --icon=Images/jogo-da-velha.ico \
