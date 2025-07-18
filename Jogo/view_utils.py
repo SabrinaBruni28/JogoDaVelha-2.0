@@ -12,7 +12,10 @@ from PyQt6.QtWidgets import (
 class WidgetHelper(QWidget):
     @staticmethod
     def caminho_absoluto(rel_path):
-        base_path = getattr(sys, '_MEIPASS', os.path.dirname(__file__))
+        try:
+            base_path = sys._MEIPASS  # Quando executado como .exe com PyInstaller
+        except AttributeError:
+            base_path = os.path.abspath(".")  # Quando executado como script .py
         return os.path.join(base_path, rel_path)
 
     @staticmethod

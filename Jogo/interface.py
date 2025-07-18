@@ -199,9 +199,20 @@ class JogoDaVelhaInterface(QMainWindow):
     def tela_inicial(self):
         tela = QWidget()
         layout_vertical = QVBoxLayout(tela)
+        layout_vertical.addSpacing(100)
+
+        layout_horizontal = QHBoxLayout()
+    
+        imagem1 = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/jogo-da-velha.png"), scaled=150)
+        layout_horizontal.addWidget(imagem1, Qt.AlignmentFlag.AlignLeft)
 
         titulo = WidgetHelper.label_b("JOGO DA VELHA", font_size=80)
-        layout_vertical.addWidget(titulo)
+        layout_horizontal.addWidget(titulo)
+
+        imagem2 = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/jogo-da-velha.png"), scaled=150)
+        layout_horizontal.addWidget(imagem2, Qt.AlignmentFlag.AlignRight)
+
+        layout_vertical.addLayout(layout_horizontal, Qt.AlignmentFlag.AlignCenter)
 
         botao_jogar = WidgetHelper.botao(
             nome="JOGAR",
@@ -221,8 +232,18 @@ class JogoDaVelhaInterface(QMainWindow):
         tela = QWidget()
         layout_vertical = QVBoxLayout(tela)
 
-        titulo = WidgetHelper.label_b("Começar com qual?", font_size=50)
-        layout_vertical.addWidget(titulo)
+        layout_horizontal = QHBoxLayout()
+    
+        imagem1 = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/jogo-da-velha.png"), scaled=150)
+        layout_horizontal.addWidget(imagem1, Qt.AlignmentFlag.AlignLeft)
+
+        titulo = WidgetHelper.label_b("Começar com qual?", font_size=80)
+        layout_horizontal.addWidget(titulo)
+
+        imagem2 = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/jogo-da-velha.png"), scaled=150)
+        layout_horizontal.addWidget(imagem2, Qt.AlignmentFlag.AlignRight)
+
+        layout_vertical.addLayout(layout_horizontal, Qt.AlignmentFlag.AlignCenter)
 
         layout_horizontal = QHBoxLayout()
 
