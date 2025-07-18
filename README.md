@@ -22,7 +22,7 @@ Este é um jogo da velha com interface gráfica moderna construída em **Python*
 ├── Jogo/
 │   ├── interface.py         # Interface principal do jogo
 │   ├── jogo_da_velha.py     # Lógica do jogo
-│   └── view_utils/          # Componentes reutilizáveis (botões, imagens etc.)
+│   └── view_utils.py        # Componentes reutilizáveis (botões, imagens etc.)
 ├── Images/                  # Imagens dos símbolos (X e O)
 ├── requirements.txt         # Dependências do projeto
 └── Makefile                 # Automação de comandos
