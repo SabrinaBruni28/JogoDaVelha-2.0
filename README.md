@@ -2,6 +2,15 @@
 
 Este é um jogo da velha com interface gráfica moderna construída em **Python** utilizando **PyQt6**. Dois jogadores se alternam marcando `X` ou `O` em um tabuleiro 3x3 até que um deles vença ou a partida termine em empate.
 
+<div align="center">
+  <img src="Images/jogo-da-velha.png" alt="jogo-da-velha" width="200"/>
+</div>
+
+--- 
+## Executáveis para download 
+- [Executável Windows (JogoDaVelha.exe)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16603908338/artifacts/3641739817) 
+- [Executável Linux (JogoDaVelha)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16603908338/artifacts/3641740019) 
+- [Executável macOS (JogoDaVelha)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16603908338/artifacts/3641739804)
 ---
 
 ## 🚀 Funcionalidades
@@ -26,45 +35,6 @@ Este é um jogo da velha com interface gráfica moderna construída em **Python*
 ├── Images/                  # Imagens dos símbolos (X e O)
 ├── requirements.txt         # Dependências do projeto
 └── Makefile                 # Automação de comandos
-```
----
-
-## 🛠️ Como rodar o projeto
-
-Siga os passos abaixo para configurar e executar o jogo:
-
-
-### Utilize o Makefile
-
-Use os comandos abaixo para gerenciar o ambiente virtual e executar o projeto:
-
-#### 🧱 Criar ambiente virtual
-
-```bash
-make criar_ambiente
-```
-
-#### 📦 Instalar as dependências
-
-```bash
-make instalar_bibliotecas
-```
-
-#### ▶️ Rodar o jogo
-
-```bash
-make run
-```
-
-#### ▶️ Gerar um executável Linux
-
-```bash
-make executavel_linux
-```
-#### ▶️ Gerar um executável Windows
-
-```bash
-make executavel_windows
 ```
 ---
 
