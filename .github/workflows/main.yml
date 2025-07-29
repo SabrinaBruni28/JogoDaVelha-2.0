@@ -1,0 +1,110 @@
+name: Build Campo Minado
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Build Windows Executable
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+  
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+  
+      - name: Create virtual environment
+        shell: cmd
+        run: python -m venv .venv
+  
+      - name: Install dependencies
+        shell: cmd
+        run: .venv\Scripts\pip.exe install -r requirements.txt
+  
+      - name: Build with PyInstaller
+        shell: cmd
+        run: |
+          call .venv\Scripts\activate.bat
+          pyinstaller --name JogoDaVelha --onefile --windowed --icon=Images/jogo-da-velha.ico --add-data "Images;Images" Jogo/interface.py
+  
+      - name: Check dist folder contents
+        shell: cmd
+        run: dir dist
+  
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: JogoDaVelha-Windows
+          path: dist/JogoDaVelha.exe
+
+  build-linux:
+    name: Build Linux Executable
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: |
+          source .venv/bin/activate
+          pyinstaller --name JogoDaVelha --onefile --windowed \
+            --icon=Images/jogo-da-velha.ico \
+            --add-data "Images:Images" \
+            Jogo/interface.py
+
+      - name: Upload Linux Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: JogoDaVelha-Linux
+          path: dist/JogoDaVelha
+
+  build-macos:
+    name: Build macOS Executable
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt
+          pip install pillow
+
+      - name: Convert .ico to .icns
+        run: |
+          source .venv/bin/activate
+          python -c "from PIL import Image; Image.open('Images/jogo-da-velha.ico').save('Images/jogo-da-velha.icns')"
+
+      - name: Build with PyInstaller
+        run: |
+          source .venv/bin/activate
+          pyinstaller --name JogoDaVelha --onefile --windowed \
+            --icon=Images/jogo-da-velha.icns \
+            --add-data "Images:Images" \
+            Jogo/interface.py
+
+      - name: Upload macOS Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: JogoDaVelha-macOS
+          path: dist/JogoDaVelha
