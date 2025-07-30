@@ -3,7 +3,7 @@
 Este é um jogo da velha com interface gráfica moderna construída em **Python** utilizando **PyQt6**. Dois jogadores se alternam marcando `X` ou `O` em um tabuleiro 3x3 até que um deles vença ou a partida termine em empate.
 
 <div align="center">
-  <img src="Images/jogo-da-velha.png" alt="jogo-da-velha" width="200"/>
+  <img src="https://professorrafaelporcari.com/wp-content/uploads/2021/11/ad882-jogo-da-velha.png?w=400&h=400" alt="jogo-da-velha" width="200"/>
 </div>
 
 --- 
