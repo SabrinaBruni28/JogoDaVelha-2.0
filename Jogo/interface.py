@@ -77,6 +77,15 @@ class JogoDaVelhaInterface(QMainWindow):
         self.jogo = JogoDaVelha()
         self.jogo.init_player(self.jogo.player_1)
         self.view.abrir_tela(self.stack, self.tela_inicial)
+        self.dupla = True
+
+    def jogo_robo(self):
+        self.dupla = False
+        self.view.abrir_tela(self.stack, self.tela_opcao)
+
+    def jogo_dupla(self):
+        self.dupla = True
+        self.view.abrir_tela(self.stack, self.tela_opcao)
 
     def closeEvent(self, event):
         dialogo = CaixaConfirmacao(self, titulo="Confirmar saída", mensagem="Você tem certeza que deseja sair?")
@@ -103,7 +112,7 @@ class JogoDaVelhaInterface(QMainWindow):
 
         bloco.mousePressEvent = lambda e: self.adicionarJogada(num, layout)
         return bloco
-    
+
     def adicionarJogada(self, num: int, layout: QVBoxLayout):
         bolinha_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/bolinha.png"), scaled=150)
         x_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/x.jpg"), scaled=150)
@@ -117,6 +126,29 @@ class JogoDaVelhaInterface(QMainWindow):
             vencedor = self.jogo.confere_vencedor()
             if vencedor != 0:
                 self.mostrar_vencedor(vencedor)
+                return
+
+            self.jogo.change_player()
+            self.atualizar_label_jogador()
+
+            if not self.dupla:
+                self.adicionarJogadaRobo()
+
+    def adicionarJogadaRobo(self):
+        bolinha_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/bolinha.png"), scaled=150)
+        x_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/x.jpg"), scaled=150)
+
+        x, y = self.jogo.gerar_posicao_inteligente()
+        layout = self.grid.itemAt(x * 3 + y).widget().layout()
+
+        if not self.jogo.posicao_marcada(x, y):
+            imagem = bolinha_label if self.jogo.current_player() == 2 else x_label
+            self.jogo.marcar_matriz(x, y)
+            layout.addWidget(imagem, alignment=Qt.AlignmentFlag.AlignHCenter)
+            vencedor = self.jogo.confere_vencedor()
+            if vencedor != 0:
+                self.mostrar_vencedor(vencedor)
+                return
 
             self.jogo.change_player()
             self.atualizar_label_jogador()
@@ -159,7 +191,7 @@ class JogoDaVelhaInterface(QMainWindow):
             self.mensagem_vencedor.deleteLater()
             del self.mensagem_vencedor
 
-        self.view.abrir_tela(self.stack, self.tela_opcao)
+        self.view.abrir_tela(self.stack, self.tela_opcao_jogo)
 
     ###################  TELAS  ########################
     def tela_lista_blocos(self, largura=190, altura=190):
@@ -222,7 +254,7 @@ class JogoDaVelhaInterface(QMainWindow):
             hover='#FF4C4C',
             pressed='#E04343',
             border='solid #FF4C4C',
-            acao= lambda: self.view.abrir_tela(self.stack, self.tela_opcao)
+            acao= lambda: self.view.abrir_tela(self.stack, self.tela_opcao_jogo)
         )
         layout_vertical.addWidget(botao_jogar, alignment=Qt.AlignmentFlag.AlignCenter)
 
@@ -268,6 +300,53 @@ class JogoDaVelhaInterface(QMainWindow):
             pressed='#E04343',
             border='solid #FF4C4C', 
             acao= lambda: (self.jogo.init_player(2), self.view.abrir_tela(self.stack, self.tela_jogo))
+        )
+        layout_horizontal.addWidget(botao_O)
+        layout_vertical.addLayout(layout_horizontal, Qt.AlignmentFlag.AlignCenter)
+        layout_vertical.addSpacing(100)
+
+        return tela
+    
+    def tela_opcao_jogo(self):
+        tela = QWidget()
+        layout_vertical = QVBoxLayout(tela)
+
+        layout_horizontal = QHBoxLayout()
+    
+        imagem1 = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/jogo-da-velha.png"), scaled=150)
+        layout_horizontal.addWidget(imagem1, Qt.AlignmentFlag.AlignLeft)
+
+        titulo = WidgetHelper.label_b("Qual tipo de jogo?", font_size=80)
+        layout_horizontal.addWidget(titulo)
+
+        imagem2 = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/jogo-da-velha.png"), scaled=150)
+        layout_horizontal.addWidget(imagem2, Qt.AlignmentFlag.AlignRight)
+
+        layout_vertical.addLayout(layout_horizontal, Qt.AlignmentFlag.AlignCenter)
+
+        layout_horizontal = QHBoxLayout()
+
+        botao_X = WidgetHelper.botao(
+            nome="1 pessoa",
+            largura=400, altura= 100,
+            fonte= 80,
+            backcolor="#D12A2A",
+            hover='#FF4C4C',
+            pressed='#E04343',
+            border='solid #FF4C4C',
+            acao= lambda: (self.jogo.init_player(1), self.view.abrir_tela(self.stack, self.jogo_robo))
+        )
+        layout_horizontal.addWidget(botao_X)
+
+        botao_O = WidgetHelper.botao(
+            nome="2 pessoas",
+            largura=400, altura= 100,
+            fonte= 80,
+            backcolor="#D12A2A",
+            hover='#FF4C4C',
+            pressed='#E04343',
+            border='solid #FF4C4C',
+            acao= lambda: (self.jogo.init_player(2), self.view.abrir_tela(self.stack, self.jogo_dupla))
         )
         layout_horizontal.addWidget(botao_O)
         layout_vertical.addLayout(layout_horizontal, Qt.AlignmentFlag.AlignCenter)

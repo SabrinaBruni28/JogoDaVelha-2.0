@@ -1,4 +1,4 @@
-
+import random
 
 class JogoDaVelha:
     def __init__(self):
@@ -17,6 +17,53 @@ class JogoDaVelha:
 
     def change_player(self):
         self.jogador_atual = self.player_1 if self.jogador_atual == self.player_2 else self.player_2
+
+    def gerar_posicao(self):
+        while True:
+            random_posX = random.randint(0, 2)
+            random_posY = random.randint(0, 2)
+            if not self.posicao_marcada(random_posX, random_posY):
+                break
+        return random_posX, random_posY
+    
+    def gerar_posicao_inteligente(self):
+        # 1. Tenta ganhar
+        pos = self.encontrar_posicao_vitoria(self.current_player())
+        if pos:
+            return pos
+        
+        # 2. Bloquear o adversário
+        adversario = 1 if self.current_player() == 2 else 2
+        pos = self.encontrar_posicao_vitoria(adversario)
+        if pos:
+            return pos
+        
+        # 3. Centro
+        if not self.posicao_marcada(1, 1):
+            return (1, 1)
+        
+        # 4. Cantos
+        cantos = [(0,0), (0,2), (2,0), (2,2)]
+        for c in cantos:
+            if not self.posicao_marcada(*c):
+                return c
+        
+        # 5. Qualquer posição livre
+        for x in range(3):
+            for y in range(3):
+                if not self.posicao_marcada(x, y):
+                    return (x, y)
+                
+    def encontrar_posicao_vitoria(self, jogador):
+        for x in range(3):
+            for y in range(3):
+                if not self.posicao_marcada(x, y):
+                    self.jogo[x][y] = jogador  # tenta marcar
+                    if self.confere_vencedor() == jogador:
+                        self.jogo[x][y] = 0  # desfaz a marcação
+                        return (x, y)
+                    self.jogo[x][y] = 0  # desfaz a marcação
+        return None
 
     def posicao_marcada(self, x, y):
         return self.jogo[x][y] != 0
