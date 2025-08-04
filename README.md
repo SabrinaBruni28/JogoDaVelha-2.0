@@ -8,9 +8,9 @@ Este é um jogo da velha com interface gráfica moderna construída em **Python*
 
 --- 
 ## Executáveis para download 
-- [Executável Windows (JogoDaVelha.exe)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16603908338/artifacts/3641739817) 
-- [Executável Linux (JogoDaVelha)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16603908338/artifacts/3641740019) 
-- [Executável macOS (JogoDaVelha)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16603908338/artifacts/3641739804)
+- [Executável Windows (JogoDaVelha.exe)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16735777449/artifacts/3686102165) 
+- [Executável Linux (JogoDaVelha)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16735777449/artifacts/3686102557) 
+- [Executável macOS (JogoDaVelha)](https://github.com/SabrinaBruni28/JogoDaVelha-2.0/actions/runs/16735777449/artifacts/3686101976)
 ---
 
 ## 🚀 Funcionalidades
