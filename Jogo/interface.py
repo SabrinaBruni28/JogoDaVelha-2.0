@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 )
 
 class MensagemVencedor(QWidget):
-    def __init__(self, parent=None, mensagem="", on_reiniciar=None):
+    def __init__(self, parent=None, mensagem="", on_reiniciar=None, on_sair=None):
         super().__init__(parent)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Dialog)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -25,7 +25,7 @@ class MensagemVencedor(QWidget):
         container.setStyleSheet("background-color: white; border-radius: 20px;")
         
         container.setMinimumSize(500, 160)  # menor altura mínima
-        container.setMaximumHeight(300)     # limite máximo
+        container.setMaximumHeight(400)     # limite máximo
 
         container_layout = QVBoxLayout(container)
         container_layout.setContentsMargins(40, 40, 40, 40)
@@ -59,8 +59,24 @@ class MensagemVencedor(QWidget):
         """)
         self.botao_reiniciar.clicked.connect(lambda: on_reiniciar() if on_reiniciar else None)
 
+        self.botao_sair = QPushButton("Sair")
+        self.botao_sair.setFixedSize(250, 60)  # menor botão
+        self.botao_sair.setStyleSheet("""
+            QPushButton {
+                background-color: red;
+                color: white;
+                font-size: 28px;
+                border-radius: 15px;
+            }
+            QPushButton:hover {
+                background-color: darkred;
+            }
+        """)
+        self.botao_sair.clicked.connect(lambda: on_sair() if on_sair else None)
+
         container_layout.addWidget(self.label)
         container_layout.addWidget(self.botao_reiniciar)
+        container_layout.addWidget(self.botao_sair)
 
         layout.addWidget(container)
 
@@ -169,7 +185,7 @@ class JogoDaVelhaInterface(QMainWindow):
         else:
             return
 
-        self.mensagem_vencedor = MensagemVencedor(self, texto, on_reiniciar=self._reiniciar_jogo)
+        self.mensagem_vencedor = MensagemVencedor(self, texto, on_reiniciar=self._reiniciar_jogo, on_sair=self._sair_jogo)
         self.mensagem_vencedor.show()
 
     def _reiniciar_jogo(self):
@@ -191,7 +207,28 @@ class JogoDaVelhaInterface(QMainWindow):
             self.mensagem_vencedor.deleteLater()
             del self.mensagem_vencedor
 
-        self.view.abrir_tela(self.stack, self.tela_opcao_jogo)
+        self.view.abrir_tela(self.stack, self.tela_opcao)
+
+    def _sair_jogo(self):
+        self.jogo.reiniciar_jogo()
+
+        # Limpar as imagens dos blocos (supondo que você tenha referência para eles)
+        for i in range(self.grid.count()):
+            bloco = self.grid.itemAt(i).widget()
+            layout = bloco.layout()
+            if layout is not None:
+                # Remove todos os widgets (bolinha, X) do layout
+                while layout.count():
+                    child = layout.takeAt(0)
+                    if child.widget():
+                        child.widget().deleteLater()
+
+        if hasattr(self, 'mensagem_vencedor'):
+            self.mensagem_vencedor.hide()
+            self.mensagem_vencedor.deleteLater()
+            del self.mensagem_vencedor
+
+        self.view.abrir_tela(self.stack, self.tela_inicial)
 
     ###################  TELAS  ########################
     def tela_lista_blocos(self, largura=190, altura=190):

@@ -19,40 +19,46 @@ class JogoDaVelha:
         self.jogador_atual = self.player_1 if self.jogador_atual == self.player_2 else self.player_2
 
     def gerar_posicao(self):
-        while True:
-            random_posX = random.randint(0, 2)
-            random_posY = random.randint(0, 2)
-            if not self.posicao_marcada(random_posX, random_posY):
-                break
-        return random_posX, random_posY
-    
-    def gerar_posicao_inteligente(self):
-        # 1. Tenta ganhar
-        pos = self.encontrar_posicao_vitoria(self.current_player())
-        if pos:
-            return pos
-        
-        # 2. Bloquear o adversário
-        adversario = 1 if self.current_player() == 2 else 2
-        pos = self.encontrar_posicao_vitoria(adversario)
-        if pos:
-            return pos
-        
-        # 3. Centro
-        if not self.posicao_marcada(1, 1):
-            return (1, 1)
-        
-        # 4. Cantos
-        cantos = [(0,0), (0,2), (2,0), (2,2)]
-        for c in cantos:
-            if not self.posicao_marcada(*c):
-                return c
-        
-        # 5. Qualquer posição livre
         for x in range(3):
             for y in range(3):
                 if not self.posicao_marcada(x, y):
                     return (x, y)
+        return None, None
+
+    def gerar_posicao_inteligente(self):
+        chance_erro = 0.3  # 30% de chance de ignorar a jogada ideal
+
+        # 1. Tenta ganhar
+        if random.random() > chance_erro:
+            pos = self.encontrar_posicao_vitoria(self.current_player())
+            if pos:
+                return pos
+
+        # 2. Bloquear o adversário
+        if random.random() > chance_erro:
+            adversario = 1 if self.current_player() == 2 else 2
+            pos = self.encontrar_posicao_vitoria(adversario)
+            if pos:
+                return pos
+
+        # 3. Centro
+        if not self.posicao_marcada(1, 1):
+            if random.random() > chance_erro:
+                return (1, 1)
+
+        # 4. Cantos
+        cantos = [(0, 0), (0, 2), (2, 0), (2, 2)]
+        cantos_livres = [c for c in cantos if not self.posicao_marcada(*c)]
+        if cantos_livres:
+            if random.random() > chance_erro:
+                return random.choice(cantos_livres)
+
+        # 5. Qualquer posição livre (aleatória)
+        posicoes_livres = [(x, y) for x in range(3) for y in range(3) if not self.posicao_marcada(x, y)]
+        if posicoes_livres:
+            return random.choice(posicoes_livres)
+
+        return None, None  # tabuleiro cheio
                 
     def encontrar_posicao_vitoria(self, jogador):
         for x in range(3):
