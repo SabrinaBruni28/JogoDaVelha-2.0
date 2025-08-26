@@ -162,7 +162,7 @@ class JogoDaVelhaInterface(QMainWindow):
         y = num % 3
 
         if not self.jogo.posicao_marcada(x, y):
-            self.tocarSom(efeito=True)
+            self.tocarSom("Sounds/select.mp3")
             imagem = bolinha_label if self.jogo.current_player() == 2 else x_label
             self.jogo.marcar_matriz(x, y)
             layout.addWidget(imagem, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -178,7 +178,7 @@ class JogoDaVelhaInterface(QMainWindow):
                 self.adicionarJogadaRobo()
 
     def adicionarJogadaRobo(self):
-        self.tocarSom(efeito=True)
+        self.tocarSom("Sounds/select.mp3")
         bolinha_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/bolinha.png"), scaled=150)
         x_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/x.jpg"), scaled=150)
 
