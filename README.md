@@ -21,6 +21,7 @@ Este é um jogo da velha com interface gráfica moderna construída em **Python*
 - Botão para reiniciar o jogo a qualquer momento.
 - Detecção de vitória por linha, coluna ou diagonal.
 - Detecção de empate.
+- Opção de jogo com "robô" para jogar sozinho
 
 ---
 
