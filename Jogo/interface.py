@@ -1,7 +1,10 @@
 import sys
 from view_utils import  WidgetHelper, CaixaConfirmacao, ViewHelper
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimedia import QSoundEffect
 from jogo_da_velha import JogoDaVelha
 from PyQt6.QtGui import QFont
+from PyQt6.QtCore import QUrl
 from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import (
@@ -91,9 +94,29 @@ class JogoDaVelhaInterface(QMainWindow):
         self.setCentralWidget(self.stack)
         self.view = ViewHelper()
         self.jogo = JogoDaVelha()
+        self.defineSom()
         self.jogo.init_player(self.jogo.player_1)
         self.view.abrir_tela(self.stack, self.tela_inicial)
         self.dupla = True
+
+    def defineSom(self):
+        # Carrega o som de clique em memória (rápido, sem delay)
+        self.somClick = QSoundEffect()
+        self.somClick.setSource(QUrl.fromLocalFile(WidgetHelper.caminho_absoluto("Sounds/click.wav")))
+        self.somClick.setVolume(0.5)
+
+        # Sons maiores (win, game_over) ficam no QMediaPlayer
+        self.audio_output = QAudioOutput()
+        self.player = QMediaPlayer()
+        self.player.setAudioOutput(self.audio_output)
+
+    def tocarSom(self, caminho = '', efeito=False):
+        if efeito:  # para sons curtos
+            self.somClick.play()
+        else:       # para músicas/sons longos
+            self.player.setSource(QUrl.fromLocalFile(WidgetHelper.caminho_absoluto(caminho)))
+            self.audio_output.setVolume(0.5)
+            self.player.play()
 
     def jogo_robo(self):
         self.dupla = False
@@ -104,12 +127,15 @@ class JogoDaVelhaInterface(QMainWindow):
         self.view.abrir_tela(self.stack, self.tela_opcao)
 
     def closeEvent(self, event):
+        self.tocarSom(efeito=True)
         dialogo = CaixaConfirmacao(self, titulo="Confirmar saída", mensagem="Você tem certeza que deseja sair?")
         resposta = dialogo.exec()
 
         if resposta == QDialog.DialogCode.Accepted:
+            self.tocarSom(efeito=True)
             event.accept()
         else:
+            self.tocarSom(efeito=True)
             event.ignore()
     
     def toggle_menu(self):
@@ -136,6 +162,7 @@ class JogoDaVelhaInterface(QMainWindow):
         y = num % 3
 
         if not self.jogo.posicao_marcada(x, y):
+            self.tocarSom(efeito=True)
             imagem = bolinha_label if self.jogo.current_player() == 2 else x_label
             self.jogo.marcar_matriz(x, y)
             layout.addWidget(imagem, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -151,6 +178,7 @@ class JogoDaVelhaInterface(QMainWindow):
                 self.adicionarJogadaRobo()
 
     def adicionarJogadaRobo(self):
+        self.tocarSom(efeito=True)
         bolinha_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/bolinha.png"), scaled=150)
         x_label = WidgetHelper.imagem(WidgetHelper.caminho_absoluto("Images/x.jpg"), scaled=150)
 
@@ -185,7 +213,16 @@ class JogoDaVelhaInterface(QMainWindow):
         else:
             return
 
-        self.mensagem_vencedor = MensagemVencedor(self, texto, on_reiniciar=self._reiniciar_jogo, on_sair=self._sair_jogo)
+        self.tocarSom("Sounds/win.mp3")
+        def on_reiniciar():
+            self.tocarSom(efeito=True)
+            self._reiniciar_jogo()
+
+        def on_sair():
+            self.tocarSom(efeito=True)
+            self._sair_jogo()
+
+        self.mensagem_vencedor = MensagemVencedor(self, texto, on_reiniciar=on_reiniciar, on_sair=on_sair)
         self.mensagem_vencedor.show()
 
     def _reiniciar_jogo(self):
@@ -291,7 +328,7 @@ class JogoDaVelhaInterface(QMainWindow):
             hover='#FF4C4C',
             pressed='#E04343',
             border='solid #FF4C4C',
-            acao= lambda: self.view.abrir_tela(self.stack, self.tela_opcao_jogo)
+            acao= lambda: (self.tocarSom(efeito=True), self.view.abrir_tela(self.stack, self.tela_opcao_jogo))
         )
         layout_vertical.addWidget(botao_jogar, alignment=Qt.AlignmentFlag.AlignCenter)
 
@@ -324,7 +361,7 @@ class JogoDaVelhaInterface(QMainWindow):
             hover='#FF4C4C',
             pressed='#E04343',
             border='solid #FF4C4C',
-            acao= lambda: (self.jogo.init_player(1), self.view.abrir_tela(self.stack, self.tela_jogo))
+            acao= lambda: (self.tocarSom(efeito=True), self.jogo.init_player(1), self.view.abrir_tela(self.stack, self.tela_jogo))
         )
         layout_horizontal.addWidget(botao_X)
 
@@ -336,7 +373,7 @@ class JogoDaVelhaInterface(QMainWindow):
             hover='#FF4C4C',
             pressed='#E04343',
             border='solid #FF4C4C', 
-            acao= lambda: (self.jogo.init_player(2), self.view.abrir_tela(self.stack, self.tela_jogo))
+            acao= lambda: (self.tocarSom(efeito=True), self.jogo.init_player(2), self.view.abrir_tela(self.stack, self.tela_jogo))
         )
         layout_horizontal.addWidget(botao_O)
         layout_vertical.addLayout(layout_horizontal, Qt.AlignmentFlag.AlignCenter)
@@ -363,7 +400,7 @@ class JogoDaVelhaInterface(QMainWindow):
 
         layout_horizontal = QHBoxLayout()
 
-        botao_X = WidgetHelper.botao(
+        botao_1 = WidgetHelper.botao(
             nome="1 pessoa",
             largura=400, altura= 100,
             fonte= 80,
@@ -371,11 +408,11 @@ class JogoDaVelhaInterface(QMainWindow):
             hover='#FF4C4C',
             pressed='#E04343',
             border='solid #FF4C4C',
-            acao= lambda: (self.jogo.init_player(1), self.view.abrir_tela(self.stack, self.jogo_robo))
+            acao= lambda: (self.tocarSom(efeito=True), self.jogo.init_player(1), self.view.abrir_tela(self.stack, self.jogo_robo))
         )
-        layout_horizontal.addWidget(botao_X)
+        layout_horizontal.addWidget(botao_1)
 
-        botao_O = WidgetHelper.botao(
+        botao_2 = WidgetHelper.botao(
             nome="2 pessoas",
             largura=400, altura= 100,
             fonte= 80,
@@ -383,9 +420,9 @@ class JogoDaVelhaInterface(QMainWindow):
             hover='#FF4C4C',
             pressed='#E04343',
             border='solid #FF4C4C',
-            acao= lambda: (self.jogo.init_player(2), self.view.abrir_tela(self.stack, self.jogo_dupla))
+            acao= lambda: (self.tocarSom(efeito=True), self.jogo.init_player(2), self.view.abrir_tela(self.stack, self.jogo_dupla))
         )
-        layout_horizontal.addWidget(botao_O)
+        layout_horizontal.addWidget(botao_2)
         layout_vertical.addLayout(layout_horizontal, Qt.AlignmentFlag.AlignCenter)
         layout_vertical.addSpacing(100)
 
@@ -396,8 +433,11 @@ class JogoDaVelhaInterface(QMainWindow):
         resposta = dialogo.exec()
 
         if resposta == QDialog.DialogCode.Accepted:
+            self.tocarSom(efeito=True)
             self.jogo.reiniciar_jogo()
             self._reiniciar_jogo()
+        else:
+            self.tocarSom(efeito=True)
 
     ##########  PARTES DE TELAS  #############
     def menu_lateral(self):
@@ -416,7 +456,7 @@ class JogoDaVelhaInterface(QMainWindow):
             nome="Reiniciar Jogo", fontcolor="gray",
             backcolor="", hover="#3a3a3a", border="", pressed='#000000',
             largura=250, altura=100,
-            acao= self.reiniciar_jogo
+            acao= lambda: (self.tocarSom(efeito=True), self.reiniciar_jogo())
         )
 
         # Adicionando os botões ao layout da barra lateral
@@ -434,7 +474,7 @@ class JogoDaVelhaInterface(QMainWindow):
             largura=50, altura=50,
             backcolor="", hover="#3a3a3a", border="",
             pressed='#000000', fontcolor="gray",
-            acao= self.toggle_menu
+            acao= lambda: (self.tocarSom(efeito=True), self.toggle_menu())
         )
 
         self.label_jogador  = WidgetHelper.label_b(f"Jogador: {'X' if self.jogo.current_player() == 1 else 'O'}")

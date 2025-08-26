@@ -32,7 +32,8 @@ Este é um jogo da velha com interface gráfica moderna construída em **Python*
 │   ├── interface.py         # Interface principal do jogo
 │   ├── jogo_da_velha.py     # Lógica do jogo
 │   └── view_utils.py        # Componentes reutilizáveis (botões, imagens etc.)
-├── Images/                  # Imagens dos símbolos (X e O)
+├── Images/                  # Imagens utilizadas no jogo
+├── Sounds/                  # Sons utilizados no jogo
 ├── requirements.txt         # Dependências do projeto
 └── Makefile                 # Automação de comandos
 ```
