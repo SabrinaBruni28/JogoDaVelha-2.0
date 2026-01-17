@@ -113,3 +113,33 @@ jobs:
         with:
           name: JogoDaVelha-macOS
           path: dist/JogoDaVelha
+          
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-linux, build-macos]
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release
+
+      - name: Prepare files
+        run: |
+          mv release/JogoDaVelha-Windows/JogoDaVelha.exe release/JogoDaVelha-Windows.exe
+          mv release/JogoDaVelha-Linux/JogoDaVelha release/JogoDaVelha-Linux
+          mv release/JogoDaVelha-macOS/JogoDaVelha release/JogoDaVelha-macOS
+          chmod +x release/JogoDaVelha-Linux release/JogoDaVelha-macOS
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Jogo da Velha v${{ github.run_number }}
+          files: |
+            release/JogoDaVelha-Windows.exe
+            release/JogoDaVelha-Linux
+            release/JogoDaVelha-macOS
