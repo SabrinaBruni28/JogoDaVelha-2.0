@@ -123,24 +123,43 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
         with:
-          path: release
+          name: JogoDaVelha-Windows
+          path: release/windows
 
-      - name: Prepare files
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: JogoDaVelha-Linux
+          path: release/linux
+
+      - name: Download macOS Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: JogoDaVelha-macOS
+          path: release/macos
+
+      - name: Rename files
         run: |
-          mv release/JogoDaVelha-Windows/JogoDaVelha.exe release/JogoDaVelha-Windows.exe
-          mv release/JogoDaVelha-Linux/JogoDaVelha release/JogoDaVelha-Linux
-          mv release/JogoDaVelha-macOS/JogoDaVelha release/JogoDaVelha-macOS
+          mv release/windows/JogoDaVelha.exe release/JogoDaVelha-Windows.exe
+          mv release/linux/JogoDaVelha release/JogoDaVelha-Linux
+          mv release/macos/JogoDaVelha release/JogoDaVelha-macOS
+      - name: Package Linux and macOS binaries
+        run: |
           chmod +x release/JogoDaVelha-Linux
           chmod +x release/JogoDaVelha-macOS
-
+          tar -czf release/JogoDaVelha-Linux.tar.gz -C release JogoDaVelha-Linux
+          tar -czf release/JogoDaVelha-macOS.tar.gz -C release JogoDaVelha-macOS
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.run_number }}
-          name: Jogo da Velha v${{ github.run_number }}
+          name: Jogo Da Velha v${{ github.run_number }}
+          draft: false
+          prerelease: false
           files: |
             release/JogoDaVelha-Windows.exe
-            release/JogoDaVelha-Linux
-            release/JogoDaVelha-macOS
+            release/JogoDaVelha-Linux.tar.gz
+            release/JogoDaVelha-macOS.tar.gz
