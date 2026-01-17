@@ -132,7 +132,8 @@ jobs:
           mv release/JogoDaVelha-Windows/JogoDaVelha.exe release/JogoDaVelha-Windows.exe
           mv release/JogoDaVelha-Linux/JogoDaVelha release/JogoDaVelha-Linux
           mv release/JogoDaVelha-macOS/JogoDaVelha release/JogoDaVelha-macOS
-          chmod +x release/JogoDaVelha-Linux release/JogoDaVelha-macOS
+          chmod +x release/JogoDaVelha-Linux
+          chmod +x release/JogoDaVelha-macOS
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
